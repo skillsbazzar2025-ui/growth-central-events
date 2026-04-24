@@ -18,6 +18,7 @@ export default function Header() {
 
         <nav className="hidden md:flex space-x-6">
           <Link href="/" className="hover:text-orange-200 transition">Home</Link>
+          <Link href="/events" className="hover:text-orange-200 transition">Events</Link>
           <Link href="/memberships" className="hover:text-orange-200 transition">Memberships</Link>
           <Link href="/the-circle" className="hover:text-orange-200 transition">The Circle</Link>
           <Link href="/for-partners" className="hover:text-orange-200 transition">For Partners</Link>
@@ -38,6 +39,7 @@ export default function Header() {
       {isMenuOpen && (
         <div className="md:hidden bg-orange-700 py-4 px-4 space-y-3">
           <Link href="/" className="block hover:text-orange-200" onClick={() => setIsMenuOpen(false)}>Home</Link>
+          <Link href="/events" className="block hover:text-orange-200" onClick={() => setIsMenuOpen(false)}>Events</Link>
           <Link href="/memberships" className="block hover:text-orange-200" onClick={() => setIsMenuOpen(false)}>Memberships</Link>
           <Link href="/the-circle" className="block hover:text-orange-200" onClick={() => setIsMenuOpen(false)}>The Circle</Link>
           <Link href="/for-partners" className="block hover:text-orange-200" onClick={() => setIsMenuOpen(false)}>For Partners</Link>
