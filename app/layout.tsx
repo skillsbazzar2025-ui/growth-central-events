@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 export const metadata: Metadata = {
   title: "Growth Central Events",
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body className="antialiased flex flex-col min-h-screen">
         <Header />
         <main className="flex-grow">{children}</main>
+        <Footer />
       </body>
     </html>
   );
