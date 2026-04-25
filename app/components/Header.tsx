@@ -1,10 +1,29 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { supabase } from '@/lib/supabaseClient'
+import { useRouter } from 'next/navigation'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [user, setUser] = useState<any>(null)
+  const router = useRouter()
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null)
+    })
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+    return () => listener?.subscription.unsubscribe()
+  }, [])
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.push('/')
+  }
 
   return (
     <header className="bg-orange-600 text-white shadow-md sticky top-0 z-50">
@@ -23,6 +42,17 @@ export default function Header() {
           <Link href="/the-circle" className="hover:text-orange-200 transition">The Circle</Link>
           <Link href="/for-partners" className="hover:text-orange-200 transition">For Partners</Link>
           <Link href="/contact" className="hover:text-orange-200 transition">Contact</Link>
+          {user ? (
+            <>
+              <span className="text-sm">{user.email}</span>
+              <button onClick={handleLogout} className="hover:text-orange-200">Logout</button>
+            </>
+          ) : (
+            <>
+              <Link href="/login" className="hover:text-orange-200 transition">Login</Link>
+              <Link href="/signup" className="hover:text-orange-200 transition">Sign Up</Link>
+            </>
+          )}
         </nav>
 
         <button className="md:hidden text-white focus:outline-none" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -44,6 +74,14 @@ export default function Header() {
           <Link href="/the-circle" className="block hover:text-orange-200" onClick={() => setIsMenuOpen(false)}>The Circle</Link>
           <Link href="/for-partners" className="block hover:text-orange-200" onClick={() => setIsMenuOpen(false)}>For Partners</Link>
           <Link href="/contact" className="block hover:text-orange-200" onClick={() => setIsMenuOpen(false)}>Contact</Link>
+          {user ? (
+            <button onClick={handleLogout} className="block hover:text-orange-200">Logout</button>
+          ) : (
+            <>
+              <Link href="/login" className="block hover:text-orange-200" onClick={() => setIsMenuOpen(false)}>Login</Link>
+              <Link href="/signup" className="block hover:text-orange-200" onClick={() => setIsMenuOpen(false)}>Sign Up</Link>
+            </>
+          )}
         </div>
       )}
     </header>
